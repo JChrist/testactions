@@ -28,6 +28,12 @@ jobs:
       - name: Find version
         run: |
           VERSION=$(grep "\"version\"" ./package.json | cut -f4 -d'"')
+          # check if there's already a tag created with this version
+          exists=$(git show-ref --tags --verify -- "refs/tags/${VERSION}")
+          if [[ -n "$exists" ]]; then
+            echo "There is already a tag for version <$VERSION> !"
+            exit 2
+          fi
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
       - name: Create a Release
         uses: actions/create-release@v1
