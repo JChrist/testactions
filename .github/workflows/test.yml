@@ -29,9 +29,6 @@ jobs:
         run: |
           VERSION=$(grep "\"version\"" ./package.json | cut -f4 -d'"')
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
       - name: Create a Release
         uses: actions/create-release@v1
         if: success() && github.ref == 'refs/heads/main'
