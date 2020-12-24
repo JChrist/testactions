@@ -29,9 +29,8 @@ jobs:
         run: |
           VERSION=$(grep "\"version\"" ./package.json | cut -f4 -d'"')
           # check if there's already a tag created with this version
-          git show-ref --tags --verify --quiet -- "refs/tags/${VERSION}"
-          exists=$?
-          if [[ "$exists" != '0' ]]; then
+          exists=$(git tag --list "${VERSION}")
+          if [[ -n "$exists" ]]; then
             echo "There is already a tag for version <$VERSION> !"
             exit 2
           fi
