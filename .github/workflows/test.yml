@@ -36,8 +36,11 @@ jobs:
             echo "There is already a tag for version <$VERSION> !"
             echo "Manually bumping version" 
             NEWVERSION=$(npm --no-git-tag-version version patch)
-            mvn versions:set -DnewVersion="${NEWVERSION}" -DgenerateBackupPoms=false
+            echo "Manually bumping version to ${NEWVERSION}"
+            mvn -q -B versions:set -DnewVersion="${NEWVERSION}" -DgenerateBackupPoms=false
             git add package*.json pom.xml
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
             git commit -m "Automatically bumped version to ${NEWVERSION}"
             git push
             # exit with an error, as we pushed and generated a new build
