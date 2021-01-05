@@ -37,7 +37,7 @@ jobs:
             echo "Manually bumping version" 
             NEWVERSION=$(npm --no-git-tag-version version patch)
             mvn versions:set -DnewVersion="${NEWVERSION}" -DgenerateBackupPoms=false
-            git add package.json package-lock.json pom.xml
+            git add package*.json pom.xml
             git commit -m "Automatically bumped version to ${NEWVERSION}"
             git push
             # exit with an error, as we pushed and generated a new build
