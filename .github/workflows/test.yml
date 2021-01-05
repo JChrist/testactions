@@ -34,6 +34,13 @@ jobs:
           exists=$(git tag --list "${VERSION}")
           if [[ -n "$exists" ]]; then
             echo "There is already a tag for version <$VERSION> !"
+            echo "Manually bumping version" 
+            NEWVERSION=$(npm --no-git-tag-version version patch)
+            mvn versions:set -DnewVersion="${NEWVERSION}" -DgenerateBackupPoms=false
+            git add package.json package-lock.json pom.xml
+            git commit -m "Automatically bumped version to ${NEWVERSION}"
+            git push
+            # exit with an error, as we pushed and generated a new build
             exit 2
           fi
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
