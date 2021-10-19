@@ -1,2 +1,2 @@
 # testactions
-testing github actions
+testing github actions and automatic version bumping
