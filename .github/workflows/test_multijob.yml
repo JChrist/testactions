@@ -1,0 +1,89 @@
+name: CI Multi-Job
+
+# Controls when the action will run. 
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  # JOB to run change detection
+  changes:
+    runs-on: [ubuntu-latest]
+    outputs:
+      test1: ${{ steps.filter.outputs.test1 }}
+      test2: ${{ steps.filter.outputs.test2 }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            test1: ['test_1/**']
+            test2: ['test_2/**']
+
+  test1:
+    needs: [changes]
+    runs-on: [ubuntu-latest]
+    if: ${{ github.event_name == 'workflow_dispatch' || needs.changes.outputs.test1 == 'true' }}
+    outputs:
+      result: ${{ steps.result.outputs.result}}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: test1
+        run: |
+          echo "hi from test1!"
+          {grep 'fail' ./test_1/* && exit 111} || true
+      - id: result
+        if: always()
+        run: echo "::set-output name=result::${{job.status}}"
+      - name: Cancel current workflow run
+        if: failure()
+        uses: actions/github-script@v5
+        with:
+          script: |
+            github.rest.actions.cancelWorkflowRun({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: context.runId
+            })
+  
+  test2:
+    needs: [changes]
+    runs-on: [ubuntu-latest]
+    if: ${{ github.event_name == 'workflow_dispatch' || needs.changes.outputs.test2 == 'true' }}
+    outputs:
+      result: ${{ steps.result.outputs.result}}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: test2
+        run: |
+          echo "hi from test2!"
+          {grep 'fail' ./test_2/* && exit 222} || true
+      - id: result
+        if: always()
+        run: echo "::set-output name=result::${{job.status}}"
+      - name: Cancel current workflow run
+        if: failure()
+        uses: actions/github-script@v5
+        with:
+          script: |
+            github.rest.actions.cancelWorkflowRun({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: context.runId
+            })
+
+  report:
+    needs: [changes, test1, test2]
+    runs-on: [ubuntu-latest]
+    if: always()
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: total report
+        run: |
+          echo "hi from report!";
+          echo "test1 result is: ${{needs.test1.outputs.result}}"
+          echo "test2 result is: ${{needs.test2.outputs.result}}"
