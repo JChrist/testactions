@@ -85,5 +85,13 @@ jobs:
       - name: total report
         run: |
           echo "hi from report!";
-          echo "test1 result is: ${{needs.test1.outputs.result}}"
-          echo "test2 result is: ${{needs.test2.outputs.result}}"
+          test1="${{needs.test1.outputs.result}}"
+          test2="${{needs.test2.outputs.result}}"
+          echo "test1 result is: |${test1}|"
+          echo "test2 result is: |${test2}|"
+          if [[ -z "$test1" ]]; then
+            echo "test1 result is empty"
+          fi
+          if [[ -z "${test2}" ]]; then
+            echo "test2 result is empty"
+          fi
