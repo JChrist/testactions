@@ -33,7 +33,7 @@ jobs:
       - name: test1
         run: |
           echo "hi from test1!"
-          {grep 'fail' ./test_1/* && exit 111} || true
+          cat ./test_1/* | {grep 'fail' && exit 111} || true
       - id: result
         if: always()
         run: echo "::set-output name=result::${{job.status}}"
@@ -60,7 +60,7 @@ jobs:
       - name: test2
         run: |
           echo "hi from test2!"
-          {grep 'fail' ./test_2/* && exit 222} || true
+          cat ./test_2/* | {grep 'fail' && exit 222} || true
       - id: result
         if: always()
         run: echo "::set-output name=result::${{job.status}}"
