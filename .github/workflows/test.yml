@@ -56,7 +56,7 @@ jobs:
 
           if [[ "${OLD_VERSION}" != "${VERSION}" ]]; then
             # means we bumped version, so add changelog, commit & push
-            msg="${{ github.event.head_commit.message }}"
+            msg="${{ github.event.commits[0].message }}"
             file='./Changelog.md.update'
             echo '# Release Notes' > $file
             echo '' >> $file
