@@ -1,5 +1,10 @@
 # Release Notes
 
+## 0.2.15 (2022-02-11)
+* Merge pull request #1 from JChrist/upd
+
+update in branch
+
 ## 0.2.14 (2022-02-11)
 * remove v from version
 
