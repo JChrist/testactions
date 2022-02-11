@@ -38,7 +38,8 @@ jobs:
           # first make sure we have all tags locally
           git fetch --all --tags
           exists=$(git tag --list "${VERSION}")
-          while [[ -n "$exists" ]]; then
+          while [[ -n "$exists" ]];
+          do
             echo "There is already a tag for version <$VERSION> !"
             echo "Manually bumping version" 
             NEWVERSION=$(npm --no-git-tag-version version patch)
@@ -50,7 +51,7 @@ jobs:
             exists=$(git tag --list "${VERSION}")
             # do not exit with an error, as the push using the gh bot does not generate a new build
             # exit 2
-          fi
+          done
 
           if [[ "${OLD_VERSION}" != "${VERSION}" ]]; then
             # means we bumped version, so add changelog, commit & push
