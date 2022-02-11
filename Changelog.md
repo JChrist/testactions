@@ -1,5 +1,8 @@
 # Release Notes
 
+## 0.2.16 (2022-02-11)
+* record the first commit in changelog
+
 ## 0.2.15 (2022-02-11)
 * Merge pull request #1 from JChrist/upd
 

@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>gr.jchrist</groupId>
     <artifactId>test-app</artifactId>
-    <version>0.2.15</version>
+    <version>0.2.16</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
