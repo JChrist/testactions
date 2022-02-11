@@ -61,6 +61,7 @@ jobs:
             echo '' >> $file
             echo "## ${VERSION} ($(date -I))" >> $file
             echo "* ${msg}" >> $file
+            cat "${file}"
             grep -v '# Release Notes' ./Changelog.md >> $file
             mv "$file" ./Changelog.md
 
