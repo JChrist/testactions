@@ -33,24 +33,42 @@ jobs:
       - name: Find version
         run: |
           VERSION=$(grep "\"version\"" ./package.json | cut -f4 -d'"')
+          OLD_VERSION="${VERSION}"
           # check if there's already a tag created with this version.
           # first make sure we have all tags locally
           git fetch --all --tags
           exists=$(git tag --list "${VERSION}")
-          if [[ -n "$exists" ]]; then
+          while [[ -n "$exists" ]]; then
             echo "There is already a tag for version <$VERSION> !"
             echo "Manually bumping version" 
             NEWVERSION=$(npm --no-git-tag-version version patch)
             echo "Manually bumping version from ${VERSION} to ${NEWVERSION}"
             VERSION="${NEWVERSION}"
             mvn -q -B versions:set -DnewVersion="${VERSION}" -DgenerateBackupPoms=false
-            git add package*.json pom.xml
+            
+            # now re-check if version is ok without tag
+            exists=$(git tag --list "${VERSION}")
+            # do not exit with an error, as the push using the gh bot does not generate a new build
+            # exit 2
+          fi
+
+          if [[ "${OLD_VERSION}" != "${VERSION}" ]]; then
+            # means we bumped version, so add changelog, commit & push
+            msg="${{ github.event.head_commit.message }}"
+            file='./Changelog.md.update'
+            echo '# Release Notes' > $file
+            echo '' >> $file
+            echo "## ${version} ($(date -I))" >> $file
+            echo "* ${msg}" >> $file
+            grep -v '# Release Notes' ./Changelog.md >> $file
+            mv "$file" ./Changelog.md
+
+            git add package*.json pom.xml Changelog.md
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
             git commit -m "Automatically bumped version to ${VERSION}"
             git push
-            # do not exit with an error, as the push using the gh bot does not generate a new build
-            # exit 2
+
           fi
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
       - name: Create a Release
