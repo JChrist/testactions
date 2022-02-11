@@ -3,7 +3,6 @@ name: CI Multi-Job
 # Controls when the action will run. 
 on:
   workflow_dispatch:
-  push:
 
 jobs:
   # JOB to run change detection
