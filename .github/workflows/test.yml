@@ -43,6 +43,9 @@ jobs:
             echo "There is already a tag for version <$VERSION> !"
             echo "Manually bumping version" 
             NEWVERSION=$(npm --no-git-tag-version version patch)
+            if [[ "$NEWVERSION" =~ ^v.* ]]; then
+              NEWVERSION=${NEWVERSION:1}
+            fi
             echo "Manually bumping version from ${VERSION} to ${NEWVERSION}"
             VERSION="${NEWVERSION}"
             mvn -q -B versions:set -DnewVersion="${VERSION}" -DgenerateBackupPoms=false
