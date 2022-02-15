@@ -41,7 +41,7 @@ jobs:
           OLD_VERSION="${VERSION}"
           # check if there's already a tag created with this version.
           # first make sure we have all tags locally
-          git fetch --all --tags
+          git fetch --all --tags --prune
           exists=$(git tag --list "${VERSION}")
           while [[ -n "$exists" ]];
           do
