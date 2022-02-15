@@ -71,6 +71,7 @@ jobs:
             # we bumped the version without changelog, so add automatic release notes
             # as the release message, get all commits since last tag (each in a separate line)
             commits=$(git log $(git describe --tags --abbrev=0)..HEAD --oneline)
+            echo "found commits since last tag: ${commits}"
             # prepend each commit message with a *
             msg=''
             while IFS= read -r line
