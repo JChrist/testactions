@@ -75,7 +75,8 @@ jobs:
             msg=''
             while IFS= read -r line
             do
-              msg="${msg}* ${line}\n"
+              msg="${msg}* ${line}
+              "
             done <<< "${commits}"
             file='./Changelog.md.update'
             echo '# Release Notes' > $file
