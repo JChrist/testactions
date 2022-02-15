@@ -117,6 +117,3 @@ jobs:
           prerelease: false
           tag_name: ${{env.VERSION}}
           body: ${{ env.RELEASE_NOTES_TEXT }}
-        env:
-          GITHUB_REPOSITORY: my_gh_org/my_gh_repo
-
