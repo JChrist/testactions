@@ -1,5 +1,9 @@
 # Release Notes
 
+## 0.2.20 (2022-02-15)
+* ca5f5dc make new line literal, as now it appears as \n
+    
+
 ## 0.2.19 (2022-02-15)
 * fee9179 full checkout, to be able to calculate changelog since last tag correctly\n
 
