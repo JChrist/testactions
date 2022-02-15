@@ -1,5 +1,8 @@
 # Release Notes
 
+## 0.2.19 (2022-02-15)
+* fee9179 full checkout, to be able to calculate changelog since last tag correctly\n
+
 ## 0.2.18 (2022-02-15)
 * \n
 
