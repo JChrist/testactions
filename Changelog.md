@@ -1,5 +1,9 @@
 # Release Notes
 
+## 0.2.23 (2022-02-15)
+* fb2e93d removed invalid env in release step
+    
+
 ## 0.2.22 (2022-02-15)
 * 3109304 also prune when fetching
     
