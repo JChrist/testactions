@@ -11,6 +11,10 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+concurrency:
+  group: CI-${{github.ref}}
+  cancel-in-progress: true
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
@@ -54,35 +58,57 @@ jobs:
             # exit 2
           done
 
-          if [[ "${OLD_VERSION}" != "${VERSION}" ]]; then
-            # means we bumped version, so add changelog, commit & push
-            msg="${{ github.event.commits[0].message }}"
+          echo 'Checking if changelog already exists for new version'
+          # taken from: https://stackoverflow.com/questions/40450238/parse-a-changelog-and-extract-changes-for-a-version
+          msg=$(awk -v ver="${VERSION}" '
+          /^## / { if (p) { exit }; if ($2 == ver) { p=1; next } } p && NF
+          ' ./Changelog.md)
+          echo "for version: ${VERSION} extracted changelog messages: ${msg}"
+          if [[ -z "${msg}" ]]; then
+            # we bumped the version without changelog, so add automatic release notes
+            # as the release message, get all commits since last tag (each in a separate line)
+            commits=$(git log $(git describe --tags --abbrev=0)..HEAD --oneline)
+            # prepend each commit message with a *
+            msg=''
+            while IFS= read -r line
+            do
+              msg="${msg}* ${line}\n"
+            done <<< "${commits}"
             file='./Changelog.md.update'
             echo '# Release Notes' > $file
             echo '' >> $file
             echo "## ${VERSION} ($(date -I))" >> $file
-            echo "* ${msg}" >> $file
+            echo "${msg}" >> $file
+            echo "Created automatic changelog"
             cat "${file}"
             grep -v '# Release Notes' ./Changelog.md >> $file
             mv "$file" ./Changelog.md
+            git add ./Changelog.md
+          fi
 
+          changedFiles=$(git ls-files --deleted --modified --others --exclude-standard)
+          if [[ -n "$changedFiles" ]]; then
+            echo "committing and pushing version changes"
             git add package*.json pom.xml Changelog.md
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
             git commit -m "Automatically bumped version to ${VERSION}"
             git push
-
           fi
+
+          echo "RELEASE_NOTES_TEXT=${msg}" >> $GITHUB_ENV
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
       - name: Create a Release
-        uses: actions/create-release@v1
+        uses: softprops/action-gh-release@v1
         if: success() && github.ref == 'refs/heads/main'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ env.VERSION }}
-          release_name: Release ${{ env.VERSION }}
-          body: Release ${{ env.VERSION }}
+          # note you'll typically need to create a personal access token
+          # with permissions to create releases in the other repo
+          token: ${{ secrets.GITHUB_TOKEN }}
           draft: false
           prerelease: false
+          tag_name: ${{env.VERSION}}
+          body: ${{ env.RELEASE_NOTES_TEXT }}
+        env:
+          GITHUB_REPOSITORY: my_gh_org/my_gh_repo
 
