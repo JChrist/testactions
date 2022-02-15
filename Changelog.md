@@ -1,5 +1,9 @@
 # Release Notes
 
+## 0.2.22 (2022-02-15)
+* 3109304 also prune when fetching
+    
+
 ## 0.2.21 (2022-02-15)
 * 82a0df7 print out commits found
     
