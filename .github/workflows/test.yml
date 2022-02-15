@@ -100,7 +100,10 @@ jobs:
             git push
           fi
 
-          echo "RELEASE_NOTES_TEXT=${msg}" >> $GITHUB_ENV
+          #echo "RELEASE_NOTES_TEXT=${msg}" >> $GITHUB_ENV
+          echo 'RELEASE_NOTES_TEXT<<EOF' >> $GITHUB_ENV
+          echo "${msg}" >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
       - name: Create a Release
         uses: softprops/action-gh-release@v1
