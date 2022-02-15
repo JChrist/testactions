@@ -1,5 +1,9 @@
 # Release Notes
 
+## 0.2.21 (2022-02-15)
+* 82a0df7 print out commits found
+    
+
 ## 0.2.20 (2022-02-15)
 * ca5f5dc make new line literal, as now it appears as \n
     
