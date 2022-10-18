@@ -1,5 +1,9 @@
 # Release Notes
 
+## 0.2.25 (2022-10-18)
+* 20d4097 ignore idea
+    
+
 ## 0.2.24 (2022-10-18)
 * f757137 added test
     
