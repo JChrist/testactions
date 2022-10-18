@@ -1,5 +1,9 @@
 # Release Notes
 
+## 0.2.27 (2022-10-18)
+* a2a3f86 test 4
+    
+
 ## 0.2.26 (2022-10-18)
 * c69f997 test 3
     * f3a9d5e test 2
