@@ -1,5 +1,10 @@
 # Release Notes
 
+## 0.2.26 (2022-10-18)
+* c69f997 test 3
+    * f3a9d5e test 2
+    
+
 ## 0.2.25 (2022-10-18)
 * 20d4097 ignore idea
     
