@@ -2,4 +2,4 @@
 testing github actions and automatic version bumping
 Test bump
 
-test 2
+test 3
