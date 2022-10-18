@@ -1,5 +1,9 @@
 # Release Notes
 
+## 0.2.24 (2022-10-18)
+* f757137 added test
+    
+
 ## 0.2.23 (2022-02-15)
 * fb2e93d removed invalid env in release step
     
