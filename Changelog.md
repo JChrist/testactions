@@ -1,5 +1,9 @@
 # Release Notes
 
+## 0.2.28 (2022-10-21)
+* 9ae950a added test for auto merging prs
+    
+
 ## 0.2.27 (2022-10-18)
 * a2a3f86 test 4
     
